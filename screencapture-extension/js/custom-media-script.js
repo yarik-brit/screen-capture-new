@@ -1,13 +1,10 @@
-  var base_url = "https://localhost:44336/";
-  // var base_url = "http://tensionx-002-site8.btempurl.com/"
-
 async function f(recordedBlobs){
     var superBuffer = new Blob(recordedBlobs, {
         type: 'video/webm'
     });
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", `${base_url}Data/PrepareDirectory`, true);
+    xhr.open("POST", `${config.base_url}Data/PrepareDirectory`, true);
     xhr.onload = function(){
       console.log(xhr.response);
     }
@@ -39,7 +36,7 @@ var uploadComplete = function () {
         }
       }
     }
-    xhr2.open("POST", `${base_url}Data/UploadComplete`, true); //combine the chunks together
+    xhr2.open("POST", `${config.base_url}Data/UploadComplete`, true); //combine the chunks together
     xhr2.send(null);
     
     
@@ -56,6 +53,6 @@ var uploadComplete = function () {
         }
       }
     };
-    xhr.open("POST", `${base_url}Data/MultiUpload`, true);
+    xhr.open("POST", `${config.base_url}Data/MultiUpload`, true);
     xhr.send(chunk);
   }

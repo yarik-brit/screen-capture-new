@@ -31,7 +31,7 @@
             "matches": [
             "<all_urls>"
             ],
-            "js": ["js/core.js", "js/detect.js"]
+            "js": ["js/core.js", "js/config.js", "js/detect.js"]
         }
     ],
   "permissions": [

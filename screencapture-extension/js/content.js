@@ -281,6 +281,19 @@ $(document).ready(function(){
                 newTextbox(options.pointer.x, options.pointer.y);
             }
         })
+
+        timer();
+    }
+
+    async function timer(){
+        var start = new Date();
+        console.log("Timer start -- " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds());
+        await forSeconds(config.timerCd + 3);
+        var finish = new Date();
+        console.log("Timer start -- " + finish.getHours() + ":" + finish.getMinutes() + ":" + finish.getSeconds());
+        $("#pause").trigger("click");
+        await forSeconds(0.3);
+        $("#cursor").trigger("click");
     }
     
     // Focus canvas (highlight cursor)
