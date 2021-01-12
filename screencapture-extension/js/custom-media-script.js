@@ -5,19 +5,18 @@ async function f(recordedBlobs){
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", `${config.base_url}Data/PrepareDirectory`, true);
-    xhr.onload = function(){
+    xhr.onload = async function(){
       console.log(xhr.response);
+      for (let index = 0; index < recordedBlobs.length; index++) {
+        const element = recordedBlobs[index];
+        console.log(element.size);
+        await request(element);
+        await forSeconds(1);
+      }
+  
+      uploadComplete();
     }
     xhr.send(null);
-
-    for (let index = 0; index < recordedBlobs.length; index++) {
-      const element = recordedBlobs[index];
-      console.log(element.size);
-      await request(element);
-      await forSeconds(1);
-    }
-
-    uploadComplete();
 }
 
 
