@@ -1,0 +1,84 @@
+﻿.shareBlock {
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #e7e7fd;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+.btn-share {
+    border: 1px solid grey;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.btn-share:hover {
+    border: 1px solid black;
+}
+
+.m-0{
+    margin:0;
+}
+
+.image {
+    width: 100%;
+    margin: 10px;
+}
+
+.name {
+    margin: 10px;
+}
+
+.user{
+    display:flex;
+    flex-direction: row;
+    margin: 10px;
+    padding: 10px 0;
+}
+
+.user-image img{
+    border-radius: 50%;
+}
+
+.user-info{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.comment {
+    margin: 10px;
+    width: 100%;
+}
+
+.comment-input {
+    padding: 10px;
+    border: 3px solid lightgrey;
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    resize: none;
+}
+
+.comment-input:focus {
+    border: 3px solid grey;
+}
+
+.btn-main {
+    background-color: #625df5;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.btn-main:hover {
+    color: white;
+    background-color: #4d49c9;
+}
+
+.img {
+    border: 3px solid lightgrey;
+    border-radius: 5px;
+}

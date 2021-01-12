@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Ancestry Helper</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link href="~/Content/zoom.css" rel="stylesheet" />
+    <script src="~/Scripts/site.js"></script>
+</head>
+<body>
+    <script src="~/Scripts/zoom.js"></script>
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+
+    <script src="~/Scripts/simpleNotify.js"></script>
+    <script src="~/Scripts/screenshot.js"></script>
+    <script src="~/Scripts/video.js"></script>
+</body>
+</html>
