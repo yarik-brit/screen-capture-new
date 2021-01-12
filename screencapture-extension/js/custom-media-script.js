@@ -8,12 +8,12 @@ async function f(recordedBlobs){
     xhr.onload = async function(){
       console.log(xhr.response);
       for (let index = 0; index < recordedBlobs.length; index++) {
+        await forSeconds(1);
         const element = recordedBlobs[index];
         console.log(element.size);
         await request(element);
         await forSeconds(1);
       }
-  
       uploadComplete();
     }
     xhr.send(null);

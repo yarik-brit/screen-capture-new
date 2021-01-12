@@ -4,10 +4,12 @@ async function init() {
     if (document.location.pathname == "/Video" && document.location.search.split(/[?=]+/)[1] == "id") {
         if (document.querySelector('.name > h2') != null) {
             var textArea = document.createElement('textarea');
+            textArea.hidden = true;
             textArea.value = document.location.href;
+            document.body.appendChild(textArea);
             document.querySelector('.btn-copy').onclick = () => {
-                textArea.focus();
                 textArea.select();
+                document.execCommand('copy');
                 //navigator.clipboard.writeText(document.location.href);
             };
             document.querySelector('.btn-delete').onclick = async function () {

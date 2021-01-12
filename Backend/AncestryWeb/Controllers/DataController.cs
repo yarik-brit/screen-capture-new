@@ -233,7 +233,7 @@ namespace AncestryWeb.Controllers
 
                 using (FileStream fs = System.IO.File.Create(newpath))
                 {
-                    byte[] bytes = new byte[77570];
+                    byte[] bytes = new byte[550000];
 
                     int bytesRead;
                     while ((bytesRead = Request.InputStream.Read(bytes, 0, bytes.Length)) > 0)
@@ -259,6 +259,7 @@ namespace AncestryWeb.Controllers
             try
             {
                 string newpath = Path.Combine(path, "video.mp4");
+                System.IO.File.WriteAllText(newpath, String.Empty);
 
                 DirectoryInfo info = new DirectoryInfo(path);
                 FileInfo[] files = info.GetFiles();
@@ -279,7 +280,11 @@ namespace AncestryWeb.Controllers
 
                 foreach (string item in filePaths)
                 {
-                    MergeFiles(newpath, item);
+                    if (item != newpath)
+                    {
+                        MergeFiles(newpath, item);
+                    }
+
                 }
 
                 //RecompileVideo();

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="connectionString-Web.config Connection String" description="connectionString Connection String used in web.config by the application to access the database." defaultValue="[PlaceHolder for connection: ]" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\brity\\Documents\\GitHub\\Screen-Capturing-Extension\\Backend\\AncestryWeb\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='connectionString']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\brity\\Documents\\GitHub\\screen-capture-new\\Backend\\AncestryWeb\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='connectionString']/@connectionString" />
   </parameter>
 </parameters>
