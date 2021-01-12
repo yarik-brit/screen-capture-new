@@ -1,13 +1,14 @@
 ﻿window.onload = init;
 
-//var baseUrl = "https://testscreenshot.gear.host";
-var baseUrl = "https://localhost:44336";
-
 async function init() {
     if (document.location.pathname == "/Video" && document.location.search.split(/[?=]+/)[1] == "id") {
         if (document.querySelector('.name > h2') != null) {
+            var textArea = document.createElement('textarea');
+            textArea.value = document.location.href;
             document.querySelector('.btn-copy').onclick = () => {
-                navigator.clipboard.writeText(baseUrl + document.location.pathname + document.location.search);
+                textArea.focus();
+                textArea.select();
+                //navigator.clipboard.writeText(document.location.href);
             };
             document.querySelector('.btn-delete').onclick = async function () {
                 deleteImg().then(result => location.replace(baseUrl + "/Video?id=" + result))

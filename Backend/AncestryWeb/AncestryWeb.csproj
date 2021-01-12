@@ -231,6 +231,8 @@
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap.min.js.map" />
+    <None Include="Properties\PublishProfiles\Default Settings1.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings2.pubxml" />
     <None Include="Properties\PublishProfiles\testscreenshot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\testscreenshot - FTP1.pubxml" />
     <None Include="Properties\PublishProfiles\testscreenshot - FTP2.pubxml" />

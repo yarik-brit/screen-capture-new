@@ -216,7 +216,7 @@ namespace AncestryWeb.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                error1 = "UploadVideo_Method";
+                error1 = "UploadVideo_Method==" + e.Message;
                 return Config.BaseUrl + @"Video?id=" + "__" + error1 + "__" + error2 + "__" + error3 + "__" + error4 + "__" + error5 + "__" + error6;
             }
         }
