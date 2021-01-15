@@ -4,15 +4,15 @@ async function f(recordedBlobs){
     });
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", `${config.base_url}Data/PrepareDirectory`, true);
+    xhr.open("POST", `${config.values.base_url}Data/PrepareDirectory`, true);
     xhr.onload = async function(){
       console.log(xhr.response);
       for (let index = 0; index < recordedBlobs.length; index++) {
-        await forSeconds(1);
+        await forSeconds(0.5);
         const element = recordedBlobs[index];
         console.log(element.size);
         await request(element);
-        await forSeconds(1);
+        await forSeconds(0.5);
       }
       uploadComplete();
     }
@@ -35,7 +35,7 @@ var uploadComplete = function () {
         }
       }
     }
-    xhr2.open("POST", `${config.base_url}Data/UploadComplete`, true); //combine the chunks together
+    xhr2.open("POST", `${config.values.base_url}Data/UploadComplete`, true); //combine the chunks together
     xhr2.send(null);
     
     
@@ -52,6 +52,44 @@ var uploadComplete = function () {
         }
       }
     };
-    xhr.open("POST", `${config.base_url}Data/MultiUpload`, true);
+    xhr.open("POST", `${config.values.base_url}Data/MultiUpload`, true);
     xhr.send(chunk);
   }
+
+
+
+  
+
+chrome.runtime.onMessage.addListener(
+  async function(message, sender){
+    switch(message.context){
+        case config.keys.requestSaveImg:
+        saveImg(message, sender);
+        break;
+      }
+    }
+);
+
+
+async function saveImg(message, sender){
+  var resultText = "";
+  console.log(message.data);
+  
+  var formData = new FormData();
+  formData.append('fileurl', message.data);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', `${config.values.base_url}Data/GetImageUrl`, true);
+  xhr.onload = function () {
+      console.log(this.responseText);
+      resultText = this.responseText;
+      chrome.tabs.query({active: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, new ExtensionMessage(message.context, resultText));
+      });
+      // sendPageMessage(new ExtensionMessage(message.context, resultText));
+  };
+  xhr.send(formData);
+  
+  // .then( result =>  sendPageMessage(new ExtensionMessage(message.context, result)))
+  // .catch( error =>  sendPageMessage(new ExtensionMessage(message.context, "")));
+};

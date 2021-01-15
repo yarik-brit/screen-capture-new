@@ -124,7 +124,7 @@ namespace AncestryWeb.Controllers
             var query = $@"INSERT INTO [dbo].[Image] (UserID, GUID, Name, CreatedOn) OUTPUT INSERTED.Link values({imageData.UserID}, '{imageData.GUID}', '{imageData.Name}', '{imageData.CreatedOn}')";
             var result = DB.ExecuteQuery(query);
 
-            Debug.WriteLine(result.HasErrors);
+            Debug.WriteLine("add default to db - hasErrors - " + result.HasErrors);
 
             return result;
         }
@@ -146,7 +146,7 @@ namespace AncestryWeb.Controllers
                             WHERE Name = '{image.Name}'";
             var result = DB.ExecuteQuery(query);
 
-            Debug.WriteLine(result);
+            Debug.WriteLine("add link to db - hasErrors - " + result);
         }
 
         public void AddLink(VideoModel video)
@@ -179,21 +179,22 @@ namespace AncestryWeb.Controllers
         public string UploadVideo()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
-            string pathToFile = path + @"\video.mp4";
+            string pathToFile = path + @"\video.webm";
             try
             {
                 var uploadParams = new VideoUploadParams()
                 {
                     File = new FileDescription(pathToFile),
-                    Format = "mp4",
+                    Format = "webm",
+                    //Async = "true"
                     EagerAsync = true
                 };
-                var uploadResult = cloudinary.UploadLarge(uploadParams, 20000000);
+                var uploadResult = cloudinary.UploadLarge(uploadParams, 7500000);
                 if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     Debug.WriteLine(uploadResult.SecureUrl);
                     var fileName = GetFileTimeBasedName();
-                    var format = ".mp4";
+                    var format = ".webm";
                     currentVideo = new VideoModel
                     {
                         Name = fileName + format,
@@ -258,7 +259,7 @@ namespace AncestryWeb.Controllers
             string toReturn = "";
             try
             {
-                string newpath = Path.Combine(path, "video.mp4");
+                string newpath = Path.Combine(path, "video.webm");
                 System.IO.File.WriteAllText(newpath, String.Empty);
 
                 DirectoryInfo info = new DirectoryInfo(path);
@@ -331,12 +332,8 @@ namespace AncestryWeb.Controllers
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
             try
             {
-                //string inputPath = path + @"\video.mp4";
-                //string outputPath = path + @"\converted.mp4";
-
-
-
-
+                //string inputPath = path + @"\video.webm";
+                //string outputPath = path + @"\converted.webm";
 
             }
             catch (Exception e)

@@ -288,12 +288,13 @@ $(document).ready(function(){
     async function timer(){
         var start = new Date();
         console.log("Timer start -- " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds());
-        await forSeconds(config.timerCd + 3);
+        await forSeconds(config.values.timerCd + 4);
         var finish = new Date();
-        console.log("Timer start -- " + finish.getHours() + ":" + finish.getMinutes() + ":" + finish.getSeconds());
-        $("#pause").trigger("click");
+        console.log("Timer finish -- " + finish.getHours() + ":" + finish.getMinutes() + ":" + finish.getSeconds());
         await forSeconds(0.3);
-        $("#cursor").trigger("click");
+        $("#pause.tool").trigger("click");
+        await forSeconds(0.3);
+        $("#cursor.tool").trigger("click");
     }
     
     // Focus canvas (highlight cursor)

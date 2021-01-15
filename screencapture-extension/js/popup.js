@@ -44,13 +44,18 @@ $(document).ready(function(){
     
     // Start recording
     function record(){
-        if (!recording) {
+        if(document.querySelector(".type.type-active").id == "screenshot-selector"){
+            chrome.runtime.sendMessage({type: "screenshot"});
+        }
+        else{
+            if (!recording) {
             chrome.runtime.sendMessage({type: "record"});
             $("#record").html(chrome.i18n.getMessage("starting_recording"));
         } else {
             recording = false;
             $("#record").html(chrome.i18n.getMessage("start_recording"));
             chrome.runtime.sendMessage({type: "stop-save"}); 
+        }
         }
     }
     

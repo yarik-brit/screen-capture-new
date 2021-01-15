@@ -87,7 +87,7 @@ function saveRecording(recordedBlobs) {
 // Stop recording
 function endRecording(stream, recordedBlobs) {
     // Show default icon
-    chrome.browserAction.setIcon({path: "../assets/extension-icons/logo-32.png"});
+    chrome.browserAction.setIcon({path: "../assets/extension-icons/ico-32.png"});
     
     // Save recording if requested
     if (!cancel) {
@@ -429,7 +429,7 @@ function stopRecording(save) {
     tabid = 0;
     
     // Show default icon
-    chrome.browserAction.setIcon({path: "../assets/extension-icons/logo-32.png"});
+    chrome.browserAction.setIcon({path: "../assets/extension-icons/ico-32.png"});
     
     chrome.tabs.getSelected(null, function(tab) {
         // Check if recording has to be saved or discarded
@@ -592,7 +592,7 @@ chrome.tabs.onRemoved.addListener(function(tabid, removed) {
         recording = false;
         
         // Show default icon
-        chrome.browserAction.setIcon({path: "../assets/extension-icons/logo-32.png"});
+        chrome.browserAction.setIcon({path: "../assets/extension-icons/ico-32.png"});
         tabid = 0;
     }
 })
@@ -620,10 +620,16 @@ chrome.commands.onCommand.addListener(function(command) {
     }
 });
 
+
+
 // Listen for messages from content / popup
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if (request.type == "record") {
+        if(request.type == "screenshot"){
+            chrome.tabs.captureVisibleTab(null, {format: "jpeg", quality: 100}, function(dataUrl) {    
+            sendPageMessage(new ExtensionMessage("pageScreen", dataUrl)); });
+        }
+        else if (request.type == "record") {
             startRecording();
         } else if (request.type == "pause") {
             pauseRecording();

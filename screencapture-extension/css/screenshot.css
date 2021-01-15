@@ -1,0 +1,86 @@
+#extDiv{
+    position: fixed;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+    margin: auto;
+
+	cursor: pointer;
+
+	z-index: 9999997;
+	background-color: #444444bd;
+
+	display: flex;
+  	justify-content: center;
+}
+
+#extCanvas{
+	margin: auto;
+    top: 0px;
+    left: 0px;
+    position: relative;
+}
+
+.extCanvasButton{
+	z-index: 9999998;
+	position: fixed;
+	width: 120px;
+	height: 50px;
+	top: 10px;
+    left: 10px;
+}
+
+#extCBFinalize{
+	margin-left: 150px;
+}
+
+#extCBSave{
+	z-index: 100000000;
+    margin-left: 0px;
+}
+
+#extCBColor{
+	z-index: 100000000;
+    margin-left: 0px;
+}
+
+#extFinalDiv{
+    height: 140px;
+    background-color: aliceblue;
+    display: inline-block;
+    justify-content: center;
+    position: relative;
+    width: 400px;
+}
+
+#extFinalLabel{
+	position: relative;
+	display: block;
+	margin-bottom: 8px;
+	font-size: 30px;
+	text-align: center;
+}
+
+#extFinalInput{
+	margin-bottom: 10px;
+    margin-top: 5px;
+	width: -webkit-fill-available;
+    position: relative;
+    overflow: visible;
+}
+
+#extLoadingImg{
+	height : 150px;
+	width : 150px;
+	z-index: 9999999;
+	position: absolute;		
+}
+
+.hiddenElement{
+	visibility: hidden;
+}
+
+.visibleElement{
+	visibility: unset;
+}

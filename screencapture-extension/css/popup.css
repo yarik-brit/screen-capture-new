@@ -1,10 +1,31 @@
 body, html {
     margin: 0px;
-    width: 314px;
+    width: 320px;
     height: fit-content;
     background-color: #FFF;
     padding-bottom: 5px;
 }
+#screenshot-type{
+    display: table;
+    width: 90%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#screenshot-selector.type-active:after{
+    margin-top: 4px;
+    content: '';
+    display: block;
+    width: 90px;
+    height: 3px;
+    border-radius: 2px 2px 0px 0px;
+    background-color: #2D89F4;
+    margin-left: 100px;
+    margin-right: auto;
+    position: absolute;
+    top: 205px;
+}
+
 #navigation {
     width: 100%;
     height: 50px;
@@ -41,16 +62,17 @@ body, html {
 }
 #tabs {
     width: 100%;
-    height: 72px;
+    height: 150px;
     border-bottom: 1px solid #E7E9EB;
     background-color: #FFF;
 }
 #recording-type {
     display: table;
     width: 90%;
-    height: 100%;
+    height: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 5px;
 }
 .type {
     display: table-cell;

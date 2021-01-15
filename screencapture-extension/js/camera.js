@@ -79,7 +79,7 @@ function startRecording(){
         // When the recording has been stopped
         mediaRecorder.onstop = () => {
             // Show default icon
-            chrome.browserAction.setIcon({path: "../assets/extension-icons/logo-32.png"});
+            chrome.browserAction.setIcon({path: "../assets/extension-icons/ico-32.png"});
             
             chrome.runtime.sendMessage({type: "end-camera-recording"});
             recording = false;
