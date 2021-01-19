@@ -1,0 +1,59 @@
+﻿@using AncestryWeb.Models
+@model AncestryWeb.Models.VideoModel
+
+<link href="~/Content/video.css" rel="stylesheet" />
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <a class="navbar-brand" href="#">
+        <img src="~/Content/Images/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Screen Capture Extension
+    </a>
+    <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item active">
+            <a class="nav-link" href="#"><button class="btn btn-outline-info">Login</button></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"><button class="btn btn-main">Get extension</button></a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <br>
+            <div class="message" style="font-size: 30px;">
+                Your video is being uploaded.
+                This page will refresh automatically after upload is done.
+            </div>
+            <div class="name">
+                <h2>@Model.Name</h2>
+            </div>
+            <div class="user">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="user-image text-center">
+                            <img src="~/Content/Images/icon.png" width="80%" />
+                        </div>
+                    </div>
+                    <div class="col-lg-10 justify-content-center align-items-center">
+                        <div class="user-info">
+                            <div class="user-name">
+                                <h5>Oleksii</h5>
+                            </div>
+                            <div class="data-date">
+                                <p>21 Dec, 2020</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comment">
+                <textarea class="comment-input" rows="5"></textarea>
+                <div class="row float-right m-0">
+                    <button class="btn btn-main">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

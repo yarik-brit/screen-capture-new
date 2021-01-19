@@ -22,7 +22,7 @@ namespace AncestryWeb.Controllers
         static string linkSource = "https://res.cloudinary.com/scr-capt-rec/video/upload/v1608642998/";
 
 
-        // GET: Screenshot
+        
         public ActionResult Index(string id)
         {
             //real video - https://localhost:44336/Video?id=186E1447-451B-4FFE-8329-57B718160A52
@@ -32,9 +32,8 @@ namespace AncestryWeb.Controllers
                 string GUID = id;
                 Debug.WriteLine(GUID);
                 VideoModel video = GetVideoByGUID(GUID);
-                video.Link = GetFullReference(video);
 
-                if (video.Name == null || video.GUID == null || video.Link == null)
+                if (video.Name == null || video.GUID == null)
                 {
                     if(id == "1") { return View("~/Views/Video/NoVideoFound.cshtml"); }
                     if (id == "0") { return View("~/Views/Error.cshtml"); }
@@ -42,10 +41,31 @@ namespace AncestryWeb.Controllers
                 }
                 else
                 {
+                    video.Link = GetFullReference(video);
+                    Debug.WriteLine(video.Link);
+                    if (video.Link == linkSource + "link")
+                    {
+                        return View("~/Views/Video/AwaitingUpload.cshtml", video);
+                    }
                     return View(video);
                 }
             }
             return View("~/Views/Error.cshtml");
+        }
+
+        [HttpPost]
+        public string IsVideoUploaded()
+        {
+            string guid = Request.UrlReferrer.ToString().Split('=')[1];
+            VideoModel video = GetVideoByGUID(guid);
+            if(video.Link == "link" || video.Link == null)
+            {
+                return "false";
+            }
+            else
+            {
+                return "true";
+            }
         }
 
 
@@ -103,7 +123,7 @@ namespace AncestryWeb.Controllers
         static public string GetFullReference(VideoModel video)
         {
             string toReturn = linkSource;
-            toReturn += video.Link;
+            toReturn += video.Link.Length != 0 ? video.Link : "";
             return toReturn;
         }
 

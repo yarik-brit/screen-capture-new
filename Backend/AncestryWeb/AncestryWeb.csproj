@@ -276,6 +276,7 @@
     <Content Include="Views\Screenshot\NoImageFound.cshtml" />
     <Content Include="Views\Video\Index.cshtml" />
     <Content Include="Views\Video\NoVideoFound.cshtml" />
+    <Content Include="Views\Video\AwaitingUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

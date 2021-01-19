@@ -30,8 +30,6 @@ var uploadComplete = function () {
       if (xhr2.readyState === xhr2.DONE) {
         if (xhr2.status === 200) {
           console.log(xhr2.response);
-          var win = window.open(xhr2.response, '_blank');
-          win.focus();
         }
       }
     }
@@ -48,6 +46,10 @@ var uploadComplete = function () {
     xhr.onload = function () {
       if (xhr.readyState === xhr.DONE) {
         if (xhr.status === 200) {
+          if(xhr.response.split('/').includes("https:")){
+            var win = window.open(xhr.response, '_blank');
+            win.focus();
+          }
           console.log(xhr.response);
         }
       }

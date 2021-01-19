@@ -23,10 +23,11 @@ namespace AncestryWeb.Controllers
             "377884457262522",
             "lwZOnLWp1KaEagB7unQVblPy40A");
 
-        Cloudinary cloudinary = new Cloudinary(account);
-        ImageModel currentImage;
-        VideoModel currentVideo;
+        static Cloudinary cloudinary = new Cloudinary(account);
+        static ImageModel currentImage;
+        static VideoModel currentVideo;
         static bool INIT_UPLOAD = true;
+        static string currentGUID = "";
 
 
         static string error1 = "";
@@ -121,32 +122,58 @@ namespace AncestryWeb.Controllers
 
         public DataTable AddDefault(ImageModel imageData)
         {
-            var query = $@"INSERT INTO [dbo].[Image] (UserID, GUID, Name, CreatedOn) OUTPUT INSERTED.Link values({imageData.UserID}, '{imageData.GUID}', '{imageData.Name}', '{imageData.CreatedOn}')";
-            var result = DB.ExecuteQuery(query);
+            try
+            {
+                var query = $@"INSERT INTO [dbo].[Image] (UserID, GUID, Name, CreatedOn) OUTPUT INSERTED.Link values({imageData.UserID}, '{imageData.GUID}', '{imageData.Name}', '{imageData.CreatedOn}')";
+                var result = DB.ExecuteQuery(query);
 
-            Debug.WriteLine("add default to db - hasErrors - " + result.HasErrors);
+                Debug.WriteLine("add default to db - hasErrors - " + result.HasErrors);
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
 
         public DataTable AddDefault(VideoModel videoData)
         {
-            var query = $@"INSERT INTO [dbo].[Video] (UserID, GUID, Name, CreatedOn) values({videoData.UserID}, '{videoData.GUID}', '{videoData.Name}', '{videoData.CreatedOn}')";
-            var result = DB.ExecuteQuery(query);
+            try
+            {
+                var query = $@"INSERT INTO [dbo].[Video] (UserID, GUID, Name, CreatedOn) values({videoData.UserID}, '{videoData.GUID}', '{videoData.Name}', '{videoData.CreatedOn}')";
+                var result = DB.ExecuteQuery(query);
 
-            Debug.WriteLine("add default to db - hasErrors - " + result.HasErrors);
+                Debug.WriteLine("add default to db - hasErrors - " + result.HasErrors);
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
 
         public void AddLink(ImageModel image)
         {
-            var query = $@"UPDATE [dbo].[Image]
+            try
+            {
+                var query = $@"UPDATE [dbo].[Image]
                             SET Link = '{image.Link}'
                             WHERE Name = '{image.Name}'";
-            var result = DB.ExecuteQuery(query);
+                var result = DB.ExecuteQuery(query);
 
-            Debug.WriteLine("add link to db - hasErrors - " + result);
+                Debug.WriteLine("add link to db - hasErrors - " + result);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
         }
 
         public void AddLink(VideoModel video)
@@ -192,27 +219,16 @@ namespace AncestryWeb.Controllers
                 var uploadResult = cloudinary.UploadLarge(uploadParams, 7500000);
                 if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Debug.WriteLine(uploadResult.SecureUrl);
-                    var fileName = GetFileTimeBasedName();
-                    var format = ".webm";
-                    currentVideo = new VideoModel
-                    {
-                        Name = fileName + format,
-                        CreatedOn = fileName,
-                        UserID = 1,
-                        GUID = Guid.NewGuid().ToString(),
-                        Link = uploadResult.PublicId
-                    };
-
-                    AddDefault(currentVideo);
+                    currentVideo.Link = uploadResult.PublicId;
                     AddLink(currentVideo);
 
-                    return Config.BaseUrl + @"Video?id=" + currentVideo.GUID;
+                    return "finished upload";
                 }
                 else
                 {
-                    return Config.BaseUrl + @"Video?id=" + uploadResult.StatusCode;
+                    return "upload error";
                 }
+
             }
             catch (Exception e)
             {
@@ -221,6 +237,7 @@ namespace AncestryWeb.Controllers
                 return Config.BaseUrl + @"Video?id=" + "__" + error1 + "__" + error2 + "__" + error3 + "__" + error4 + "__" + error5 + "__" + error6;
             }
         }
+
 
         [HttpPost]
         public string MultiUpload()
@@ -234,7 +251,7 @@ namespace AncestryWeb.Controllers
 
                 using (FileStream fs = System.IO.File.Create(newpath))
                 {
-                    byte[] bytes = new byte[550000];
+                    byte[] bytes = new byte[1000000];
 
                     int bytesRead;
                     while ((bytesRead = Request.InputStream.Read(bytes, 0, bytes.Length)) > 0)
@@ -242,18 +259,39 @@ namespace AncestryWeb.Controllers
                         fs.Write(bytes, 0, bytesRead);
                     }
                 }
+
+                if (INIT_UPLOAD)
+                {
+                    Debug.WriteLine(INIT_UPLOAD);
+                    currentGUID = Guid.NewGuid().ToString();
+                    INIT_UPLOAD = false;
+                    var fileName = GetFileTimeBasedName();
+                    var format = ".webm";
+                    currentVideo = new VideoModel
+                    {
+                        Name = fileName + format,
+                        CreatedOn = fileName,
+                        UserID = 1,
+                        GUID = currentGUID
+                    };
+                    Debug.WriteLine(currentVideo.Link);
+                    AddDefault(currentVideo);
+                    return Config.BaseUrl + @"Video?id=" + currentGUID;
+                }
+                return "chunk recorded";
             }
             catch (Exception e)
             {
                 error2 = "MultiUpload_Method";
                 Debug.WriteLine(e.Message + " : " + e.StackTrace);
+                return error2;
             }
-            return "chunk recorded";
         }
 
         [HttpPost]
         public string UploadComplete()
         {
+            INIT_UPLOAD = true;
             Debug.WriteLine("upload complete");
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
             string toReturn = "";

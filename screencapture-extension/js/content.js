@@ -30,6 +30,7 @@ $(document).ready(function(){
     var lasty = 0;
     var lastscrollx = 0;
     var lastscrolly = 0;
+    var countdownTimer = 0;
     
     // Get defaults
     function getDefaults() {
@@ -41,6 +42,7 @@ $(document).ready(function(){
         });
         chrome.storage.sync.get(['toolbar'], function(result) {
            persistent = result.toolbar;
+           console.log(countdownactive);
            if (!countdownactive && persistent) {
                chrome.runtime.sendMessage({type: "countdown"});
                 if (persistent) {
@@ -108,7 +110,7 @@ $(document).ready(function(){
             $("#"+uniqueid).prepend(iframeinject);
 
             // Inject the toolbar
-            var toolbarinject = "<div id='color-pckr-thing'></div><div id='pen-slider' class='toolbar-inactive'><input type='range' min=1 max=50><img class='slider-track' src='"+chrome.extension.getURL('./assets/images/slider-track.svg')+"'></div><div id='eraser-slider' class='toolbar-inactive'><input type='range' min=1 max=50><img class='slider-track' src='"+chrome.extension.getURL('./assets/images/slider-track.svg')+"'></div><iframe id='toolbar-settings' class='toolbar-inactive' src='"+chrome.extension.getURL('./html/settings.html')+"'></iframe><div id='toolbar-record-cursor' class='toolbar-inactive noselect'><div id='click-tool' class='tool' title='Highlight clicks'><img src='"+chrome.extension.getURL('./assets/images/click.svg')+"'/></div><div id='focus-tool' class='tool' title='Highlight cursor'><img src='"+chrome.extension.getURL('./assets/images/focus.svg')+"'/></div><div id='hide-cursor-tool' class='tool' title='Hide cursor when inactive'><img src='"+chrome.extension.getURL('./assets/images/hide-cursor.svg')+"'/></div></div>   <div id='toolbar-record-pen' class='toolbar-inactive noselect'><div id='pen-tool' class='tool' title='Pen tool'><img src='"+chrome.extension.getURL('./assets/images/pen.svg')+"' class=/></div><div id='eraser' class='tool' title='Eraser tool'><img src='"+chrome.extension.getURL('./assets/images/eraser.svg')+"'/></div><div id='color-pckr' class='tool' title='Change the annotation color'><div id='color-icon'></div></div><div id='text' class='tool' title='Text tool'><img src='"+chrome.extension.getURL('./assets/images/text.svg')+"'/></div><div id='arrow' class='tool' title='Arrow tool'><img src='"+chrome.extension.getURL('./assets/images/arrow.svg')+"'/></div><div id='clear' class='tool' title='Delete all annotations'><img src='"+chrome.extension.getURL('./assets/images/clear.svg')+"'/></div></div>   <div id='toolbar-record' class='toolbar-inactive noselect'><div id='pause' class='tool' title='Pause/resume recording'><img src='"+chrome.extension.getURL('./assets/images/pausewhite.svg')+"'/></div><div id='cursor' class='tool' title='Cursor settings'><img src='"+chrome.extension.getURL('./assets/images/cursor.svg')+"'/></div><div id='pen' class='tool' title='Annotation tools'><img src='"+chrome.extension.getURL('./assets/images/pen.svg')+"'/></div><div id='camera' title='Enable camera' class='tool'><img src='"+chrome.extension.getURL('./assets/images/camera.svg')+"'/></div><div id='mic' class='tool tool-active' title='Enable/disable microphone'><img src='"+chrome.extension.getURL('./assets/images/mic-off.svg')+"'/></div><div id='tab-audio' class='tool tool-active' title='Enable/disable browser audio'><img src='"+chrome.extension.getURL('./assets/images/tab-audio-off.svg')+"'/></div><div id='settings' class='tool' title='Recording settings'><img src='"+chrome.extension.getURL('./assets/images/settings.svg')+"'/></div></div>";
+            var toolbarinject = "<div id='color-pckr-thing'></div><div id='pen-slider' class='toolbar-inactive'><input type='range' min=1 max=50><img class='slider-track' src='"+chrome.extension.getURL('./assets/images/slider-track.svg')+"'></div><div id='eraser-slider' class='toolbar-inactive'><input type='range' min=1 max=50><img class='slider-track' src='"+chrome.extension.getURL('./assets/images/slider-track.svg')+"'></div><iframe id='toolbar-settings' class='toolbar-inactive' src='"+chrome.extension.getURL('./html/settings.html')+"'></iframe><div id='toolbar-record-cursor' class='toolbar-inactive noselect'><div id='click-tool' class='tool' title='Highlight clicks'><img src='"+chrome.extension.getURL('./assets/images/click.svg')+"'/></div><div id='focus-tool' class='tool' title='Highlight cursor'><img src='"+chrome.extension.getURL('./assets/images/focus.svg')+"'/></div><div id='hide-cursor-tool' class='tool' title='Hide cursor when inactive'><img src='"+chrome.extension.getURL('./assets/images/hide-cursor.svg')+"'/></div></div>   <div id='toolbar-record-pen' class='toolbar-inactive noselect'><div id='pen-tool' class='tool' title='Pen tool'><img src='"+chrome.extension.getURL('./assets/images/pen.svg')+"' class=/></div><div id='eraser' class='tool' title='Eraser tool'><img src='"+chrome.extension.getURL('./assets/images/eraser.svg')+"'/></div><div id='color-pckr' class='tool' title='Change the annotation color'><div id='color-icon'></div></div><div id='text' class='tool' title='Text tool'><img src='"+chrome.extension.getURL('./assets/images/text.svg')+"'/></div><div id='arrow' class='tool' title='Arrow tool'><img src='"+chrome.extension.getURL('./assets/images/arrow.svg')+"'/></div><div id='clear' class='tool' title='Delete all annotations'><img src='"+chrome.extension.getURL('./assets/images/clear.svg')+"'/></div></div>   <div id='toolbar-record' class='toolbar-inactive noselect'><div id='pause' class='tool' title='Pause/resume recording'><img src='"+chrome.extension.getURL('./assets/images/pausewhite.svg')+"'/></div><div id='cursor' class='tool' title='Cursor settings'><img src='"+chrome.extension.getURL('./assets/images/cursor.svg')+"'/></div><div id='pen' class='tool' title='Annotation tools'><img src='"+chrome.extension.getURL('./assets/images/pen.svg')+"'/></div><div id='camera' title='Enable camera' class='tool'><img src='"+chrome.extension.getURL('./assets/images/camera.svg')+"'/></div><div id='mic' class='tool tool-active' title='Enable/disable microphone'><img src='"+chrome.extension.getURL('./assets/images/mic-off.svg')+"'/></div><div id='tab-audio' class='tool tool-active' title='Enable/disable browser audio'><img src='"+chrome.extension.getURL('./assets/images/tab-audio-off.svg')+"'/></div><div id='settings' class='tool' title='Recording settings'><img src='"+chrome.extension.getURL('./assets/images/settings.svg')+"'/></div><div id='timer' class='tool'>0:45</div></div>";
             $("#"+uniqueid).prepend(toolbarinject);
             
             getDefaults();
@@ -150,11 +152,14 @@ $(document).ready(function(){
             
             // Check if countdown is enabled
             if (active) {
+                countdownactive = true;
                 $("#"+uniqueid+" #toolbar-record").css("pointer-events", "none");
                 chrome.storage.sync.get(['countdown_time'], function(result) {
                     injectCountdown(result.countdown_time);
+                    countdownTimer = result.countdown_time;
                 });
             } else {
+                countdownactive = false;
                 chrome.runtime.sendMessage({type: "countdown"});
                 if (persistent) {
                     $("#"+uniqueid+" #toolbar-record").removeClass("toolbar-inactive");
@@ -191,10 +196,14 @@ $(document).ready(function(){
                     $("#"+uniqueid+" #toolbar-record").removeClass("toolbar-inactive");
                 }
                 $("#"+uniqueid+" #toolbar-record").css("pointer-events", "all");
+
+                countdownTimer = time;
+                timer();
             }
         },time*1000);
     }
     function countdown(time){
+        console.log(time);
         $("#"+uniqueid+" #countdown img").attr("src", chrome.extension.getURL('./assets/images/'+time+'-countdown.svg'));
         for (var i = 0; i <= time; i++) {
             if (i == time) {
@@ -281,16 +290,45 @@ $(document).ready(function(){
                 newTextbox(options.pointer.x, options.pointer.y);
             }
         })
+        
+        if(!countdownactive)
+            timer();
+    }
 
-        timer();
+    function prettyTime(seconds){
+        var hrs = ~~(seconds / 3600);
+        var mins = ~~((seconds % 3600) / 60);
+        var secs = ~~seconds % 60;
+    
+        // Output like "1:01" or "4:03:59" or "123:03:59"
+        var rtrn = "";
+        if (hrs > 0) {
+            rtrn += "" + hrs + ":" + (mins < 10 ? "0" : "");
+        }
+        rtrn += "" + mins + ":" + (secs < 10 ? "0" : "");
+        rtrn += "" + secs;
+        return rtrn;
     }
 
     async function timer(){
         var start = new Date();
         console.log("Timer start -- " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds());
-        await forSeconds(config.values.timerCd + 4);
+
+        var timer = document.querySelector('#screenity-screen-recorder-extension #toolbar-record #timer');
+        var countdonwner = config.values.timerCd;
+               
+
+        while(countdonwner > 0){
+            timer.textContent = prettyTime(countdonwner);
+            console.log(timer.textContent);
+            countdonwner--;
+            await forSeconds(1);
+        }
+
         var finish = new Date();
         console.log("Timer finish -- " + finish.getHours() + ":" + finish.getMinutes() + ":" + finish.getSeconds());
+
+
         await forSeconds(0.3);
         $("#pause.tool").trigger("click");
         await forSeconds(0.3);
