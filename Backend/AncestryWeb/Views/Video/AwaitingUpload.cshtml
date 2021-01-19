@@ -20,10 +20,10 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8">
-            <br>
-            <div class="message" style="font-size: 30px;">
-                Your video is being uploaded.
-                This page will refresh automatically after upload is done.
+            <div class="image">
+                <p id="uploadingText">Your video is being uploaded...</p>
+                <img id="loading" src="~/Content/Images/loading.gif" />
+                <video class="video" width="100%" controls hidden="true"></video>
             </div>
             <div class="name">
                 <h2>@Model.Name</h2>
@@ -51,6 +51,40 @@
                 <textarea class="comment-input" rows="5"></textarea>
                 <div class="row float-right m-0">
                     <button class="btn btn-main">Post</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="shareBlock">
+                <div class="row m-0">
+                    <div class="col-lg-12">
+                        <h3>
+                            Send Your Video
+                        </h3>
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="col-lg-8">
+                        <button class="btn btn-main btn-copy text-center"><i class="fas fa-link"></i> Copy Link</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button class="btn btn-share text-center"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shareBlock">
+                <div class="row m-0">
+                    <div class="col-lg-12">
+                        <h3>
+                            Delete This Video
+                        </h3>
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="col-lg-8">
+                        <button class="btn btn-main btn-delete text-center">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>

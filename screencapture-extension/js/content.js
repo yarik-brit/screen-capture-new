@@ -318,7 +318,7 @@ $(document).ready(function(){
         var countdonwner = config.values.timerCd;
                
 
-        while(countdonwner > 0){
+        while(countdonwner >= 0){
             timer.textContent = prettyTime(countdonwner);
             console.log(timer.textContent);
             countdonwner--;

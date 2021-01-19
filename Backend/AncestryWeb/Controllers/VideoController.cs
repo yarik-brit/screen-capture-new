@@ -64,7 +64,7 @@ namespace AncestryWeb.Controllers
             }
             else
             {
-                return "true";
+                return GetFullReference(video);
             }
         }
 
