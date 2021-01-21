@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "Restore Account Access";
+}
+
+
+<div id="new-password">
+    <h2>Enter a new password</h2>
+    <input type="password" placeholder="Password" name="password" id="password"/> <br />
+    <input type="password" placeholder="Confirm password" name="confirm" id="confirm"/> <br />
+
+    <div class="button" id="change-password">Change password</div>
+</div>
+<div id="activation-result">
+    Incorrect recovery link
+</div>
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: rgb(235,235,235);
+    }
+    #activation-result {
+        position: absolute;
+        top: 0;
+        bottom: 5%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: 70px;
+        height: 70px;
+        text-align: center;
+        font-size: 25px;
+        display: none;
+    }
+    #new-password {
+        position: absolute;
+        top: 0;
+        bottom: 0%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: 350px;
+        width: 400px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+        border-radius: 3px;
+        text-align: center;
+        font-size: 15px;
+        background: white;
+        display: none;
+    }
+        #new-password input {
+            margin-top: 25px;
+            padding: 5px;
+            outline-color: transparent;
+            transition: border-bottom-color 0.3s;
+            border: none;
+            border-bottom: 2px solid rgba(0,0,0,0.4);
+        }
+            #new-password input:focus {
+                border-bottom-color: #6ba410;
+            }
+        /*#6ba410*/
+        #new-password h2 {
+            text-transform: uppercase;
+            padding: 18px 0;
+            font-size: 20px;
+        }
+
+    .button {
+        padding: 10px 20px;
+        width: 200px;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-size: 18px;
+        background: #6ba410;
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: filter 0.3s;
+    }
+    .button:hover{
+        filter: brightness(0.9);
+    }
+</style>
+<script>
+    loading(true);
+    validate();
+
+
+    async function validate() {
+        var correctLink = false;
+        let url = new URL(location.href);
+        let code = url.searchParams.get("hash");
+        let userId = url.searchParams.get("userId");
+        if (code && userId) {
+            correctLink = await validateRequest();
+        }
+
+        document.querySelector("#new-password").style.display = correctLink.success ? "block" : "none";
+        document.querySelector("#activation-result").style.display = correctLink.success ? "none" : "block";
+        loading(false);
+        function validateRequest() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    //contentType: "json",
+                    data: { code, userId },
+                    url: `${window.location.origin}/Account/VerifyAccountRestore`,
+                    dataType: "json",
+                    success: (result) => {
+                        resolve(result);
+                    },
+                    error: (result) => {
+                        // console.log(result);
+                        reject(result);
+                    },
+                });
+            });
+        }
+    }
+
+
+    let submit = document.querySelector("#change-password");
+    submit.onclick = async function () {
+        let fields = this.closest("#new-password").querySelectorAll(`input[type="password"]`);
+        if (fields[0].value != fields[1].value) {
+            return simpleNotify.notify("Passwords do not match", "danger");
+        }
+
+        let password = fields[0].value;
+        fields[0].value = fields[1].value = "";
+
+        let url = new URL(location.href);
+        let code = url.searchParams.get("hash");
+        let userId = url.searchParams.get("userId");
+        var result;
+        if (code && userId) {
+            result = await sendPassword();
+        }
+
+        simpleNotify.notify(result.message, result.success ? "good" : "danger");
+
+        if (result.success) {
+            document.querySelector("#new-password").style.display = "none";
+        }
+        function sendPassword() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    //contentType: "json",
+                    data: { code, userId, password },
+                    url: `${window.location.origin}/Account/ChangePassword`,
+                    dataType: "json",
+                    success: (result) => {
+                        resolve(result);
+                    },
+                    error: (result) => {
+                        // console.log(result);
+                        reject(result);
+                    },
+                });
+            });
+        }
+    }
+</script>
