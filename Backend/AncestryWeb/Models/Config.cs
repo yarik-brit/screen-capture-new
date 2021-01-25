@@ -7,6 +7,7 @@ namespace AncestryWeb.Models
     {
         //public static string BaseUrl = "http://tensionx-002-site8.btempurl.com/";
         public static string BaseUrl = "https://localhost:44336/";
+        //public static string BaseUrl = "http://31.131.23.206/";
         //public static string connectionString = "Data Source=den1.mssql8.gear.host;Initial Catalog=extensiontask;User ID=extensiontask;Password='Rb7s?7?SQHZU'";
         public static string connectionString = "Data Source=den1.mssql8.gear.host;Initial Catalog=testscreenshot;User ID=testscreenshot;Password='Mn4L~-a7k5UP'";
 

@@ -1,6 +1,7 @@
 ﻿window.onload = init;
 //var baseUrl = "http://tensionx-002-site8.btempurl.com/";
-var baseUrl = "https://localhost:44336/";
+//var baseUrl = "https://localhost:44336/";
+var baseUrl = "http://31.131.23.206/";
 
 async function init() {
     if (document.location.pathname == "/Video" && document.location.search.split(/[?=]+/)[1] == "id") {

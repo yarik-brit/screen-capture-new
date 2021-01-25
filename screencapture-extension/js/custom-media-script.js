@@ -8,11 +8,12 @@ async function f(recordedBlobs){
     xhr.onload = async function(){
       console.log(xhr.response);
       for (let index = 0; index < recordedBlobs.length; index++) {
-        await forSeconds(0.5);
         const element = recordedBlobs[index];
         console.log(element.size);
-        await request(element);
-        await forSeconds(0.5);
+        var formData = new FormData();
+        formData.append('filepart', element, index.toString());
+        await request(formData);
+        await forSeconds(0.2);
       }
       uploadComplete();
     }
@@ -20,11 +21,7 @@ async function f(recordedBlobs){
 }
 
 
-var uploadComplete = function () {
-    // var formData = new FormData();
-    // formData.append('fileName', "video.mp4");
-    // formData.append('completed', true);
-    
+var uploadComplete = function () { 
     var xhr2 = new XMLHttpRequest();
     xhr2.onreadystatechange = function() {
       if (xhr2.readyState === xhr2.DONE) {
@@ -35,13 +32,10 @@ var uploadComplete = function () {
     }
     xhr2.open("POST", `${config.values.base_url}Data/UploadComplete`, true); //combine the chunks together
     xhr2.send(null);
-    
-    
   };
   
   
-  
-  var request = function(chunk){
+var request = function(formData){
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
       if (xhr.readyState === xhr.DONE) {
@@ -55,12 +49,9 @@ var uploadComplete = function () {
       }
     };
     xhr.open("POST", `${config.values.base_url}Data/MultiUpload`, true);
-    xhr.send(chunk);
+    xhr.send(formData);
   }
 
-
-
-  
 
 chrome.runtime.onMessage.addListener(
   async function(message, sender){
@@ -88,10 +79,6 @@ async function saveImg(message, sender){
       chrome.tabs.query({active: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, new ExtensionMessage(message.context, resultText));
       });
-      // sendPageMessage(new ExtensionMessage(message.context, resultText));
   };
   xhr.send(formData);
-  
-  // .then( result =>  sendPageMessage(new ExtensionMessage(message.context, result)))
-  // .catch( error =>  sendPageMessage(new ExtensionMessage(message.context, "")));
 };

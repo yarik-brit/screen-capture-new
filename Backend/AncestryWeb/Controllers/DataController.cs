@@ -13,6 +13,10 @@ using CloudinaryDotNet.Actions;
 using nQuant;
 using AncestryWeb.Models;
 using System.IO;
+//using NReco.VideoConverter;
+
+using MediaToolkit.Model;
+using MediaToolkit;
 
 namespace AncestryWeb.Controllers
 {
@@ -28,6 +32,8 @@ namespace AncestryWeb.Controllers
         static VideoModel currentVideo;
         static bool INIT_UPLOAD = true;
         static string currentGUID = "";
+        static string currentTempVidFile = "";
+        static int chunksCounter = 0;
 
 
         static string error1 = "";
@@ -201,22 +207,36 @@ namespace AncestryWeb.Controllers
             return fileNameString;
         }
 
+        public string GetRandomFileName(int length)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            var finalString = new String(stringChars);
+            return finalString;
+        }
+
 
 
         public string UploadVideo()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
-            string pathToFile = path + @"\video.webm";
+            string pathToFile = path + @"\" + currentTempVidFile + "_converted.webm";
             try
             {
                 var uploadParams = new VideoUploadParams()
                 {
                     File = new FileDescription(pathToFile),
-                    Format = "webm",
-                    //Async = "true"
-                    EagerAsync = true
+                    Format = "mp4",
+                    //EagerAsync = true
                 };
-                var uploadResult = cloudinary.UploadLarge(uploadParams, 7500000);
+                var uploadResult = cloudinary.UploadLarge(uploadParams);
                 if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     currentVideo.Link = uploadResult.PublicId;
@@ -234,7 +254,7 @@ namespace AncestryWeb.Controllers
             {
                 Debug.WriteLine(e.Message);
                 error1 = "UploadVideo_Method==" + e.Message;
-                return Config.BaseUrl + @"Video?id=" + "__" + error1 + "__" + error2 + "__" + error3 + "__" + error4 + "__" + error5 + "__" + error6;
+                return error1 + "__" + error2 + "__" + error3 + "__" + error4 + "__" + error5 + "__" + error6;
             }
         }
 
@@ -242,19 +262,24 @@ namespace AncestryWeb.Controllers
         [HttpPost]
         public string MultiUpload()
         {
-            Debug.WriteLine("recieved chunk");
+            if(INIT_UPLOAD)
+            { currentTempVidFile = GetRandomFileName(5); }
+
+            HttpContext context = System.Web.HttpContext.Current;
+            var chunk = context.Request.Files[0];
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
             try
             {
-                var chunks = Request.InputStream;
-                string newpath = Path.Combine(path, Path.GetRandomFileName());
+                //var chunks = Request.InputStream;
+                //Debug.WriteLine(chunks);
+                string newpath = Path.Combine(path, currentTempVidFile + "-" + chunk.FileName);
 
                 using (FileStream fs = System.IO.File.Create(newpath))
                 {
                     byte[] bytes = new byte[1000000];
 
                     int bytesRead;
-                    while ((bytesRead = Request.InputStream.Read(bytes, 0, bytes.Length)) > 0)
+                    while ((bytesRead = chunk.InputStream.Read(bytes, 0, bytes.Length)) > 0)
                     {
                         fs.Write(bytes, 0, bytesRead);
                     }
@@ -262,6 +287,7 @@ namespace AncestryWeb.Controllers
 
                 if (INIT_UPLOAD)
                 {
+                    
                     Debug.WriteLine(INIT_UPLOAD);
                     currentGUID = Guid.NewGuid().ToString();
                     INIT_UPLOAD = false;
@@ -297,7 +323,7 @@ namespace AncestryWeb.Controllers
             string toReturn = "";
             try
             {
-                string newpath = Path.Combine(path, "video.webm");
+                string newpath = Path.Combine(path, currentTempVidFile + ".webm");
                 System.IO.File.WriteAllText(newpath, String.Empty);
 
                 DirectoryInfo info = new DirectoryInfo(path);
@@ -326,7 +352,7 @@ namespace AncestryWeb.Controllers
 
                 }
 
-                //RecompileVideo();
+                RecompileVideo();
 
             }
             catch (Exception e)
@@ -336,7 +362,7 @@ namespace AncestryWeb.Controllers
             }
             toReturn = UploadVideo();
             return toReturn;
-            //return "asdasd";
+            //return "SEHR GUT!";
         }
 
         private static void MergeFiles(string file1, string file2)
@@ -370,9 +396,28 @@ namespace AncestryWeb.Controllers
             string path = AppDomain.CurrentDomain.BaseDirectory + "Temp";
             try
             {
-                //string inputPath = path + @"\video.webm";
-                //string outputPath = path + @"\converted.webm";
+                Debug.WriteLine("Start convertion: " + DateTime.UtcNow.ToString("HH.mm.ss"));
 
+                ////=============================================
+                //// NReco.VideoConverter
+                ////=============================================
+                //string inputPath = path + @"\" + currentTempVidFile + ".webm";
+                //string outputPath = path + @"\" + currentTempVidFile + "_converted.webm";
+                //var ffMpeg = new FFMpegConverter();
+                //ffMpeg.ConvertMedia(inputPath, outputPath, "webm");
+
+                ////=============================================
+                //// MediaTooklit
+                ////=============================================
+                var inputFile = new MediaFile { Filename = path + @"\" + currentTempVidFile + ".webm" };
+                var outputFile = new MediaFile { Filename = path + @"\" + currentTempVidFile + "_converted.webm" };
+                using (var engine = new Engine())
+                {
+                    engine.ConversionCompleteEvent += engine_ConversionCompleteEvent;
+                    engine.Convert(inputFile, outputFile);
+                }
+
+                Debug.WriteLine("End convertion: " + DateTime.UtcNow.ToString("HH.mm.ss"));
             }
             catch (Exception e)
             {
@@ -381,6 +426,16 @@ namespace AncestryWeb.Controllers
             }
         }
 
+        private static void engine_ConversionCompleteEvent(object sender, ConversionCompleteEventArgs e)
+        {
+            Debug.WriteLine("\n------------\nConversion complete!\n------------");
+            Debug.WriteLine("Bitrate: {0}", e.Bitrate);
+            Debug.WriteLine("Fps: {0}", e.Fps);
+            Debug.WriteLine("Frame: {0}", e.Frame);
+            Debug.WriteLine("ProcessedDuration: {0}", e.ProcessedDuration);
+            Debug.WriteLine("SizeKb: {0}", e.SizeKb);
+            Debug.WriteLine("TotalDuration: {0}\n", e.TotalDuration);
+        }
 
         [HttpPost]
         public string PrepareDirectory()

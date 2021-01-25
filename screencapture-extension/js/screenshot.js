@@ -1,4 +1,4 @@
-console.log("Hello, extension!");
+console.log("Hello, extension! -- " + config.values.timerCd);
 
 
 chrome.runtime.onMessage.addListener(

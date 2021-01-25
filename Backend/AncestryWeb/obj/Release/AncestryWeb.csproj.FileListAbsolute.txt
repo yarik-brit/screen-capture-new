@@ -137,7 +137,6 @@ C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Micro
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Newtonsoft.Json.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\nQuant.Core.dll
-C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\NReco.VideoConverter.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Buffers.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Drawing.Common.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Memory.dll
@@ -164,7 +163,6 @@ C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Micro
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Microsoft.Configuration.ConfigurationBuilders.UserSecrets.xml
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\Newtonsoft.Json.xml
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\nQuant.Core.pdb
-C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\NReco.VideoConverter.xml
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Buffers.xml
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Memory.xml
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\System.Numerics.Vectors.xml
@@ -186,3 +184,4 @@ C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\obj\Relea
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\obj\Release\AncestryWeb.csproj.CopyComplete
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\obj\Release\AncestryWeb.dll
 C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\obj\Release\AncestryWeb.pdb
+C:\Users\brity\Documents\GitHub\screen-capture-new\Backend\AncestryWeb\bin\MediaToolkit.dll
